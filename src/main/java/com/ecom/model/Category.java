@@ -20,6 +20,20 @@ public class Category {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int id;
 	
+	private String name;
+	
+	private String imageName;
+	
+	private Boolean isActive;
+
+	public Category(int id, String name, String imageName, Boolean isActive) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.imageName = imageName;
+		this.isActive = isActive;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -40,19 +54,6 @@ public class Category {
 		return imageName;
 	}
 
-	public Category() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Category(int id, String name, String imageName, Boolean isActive) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.imageName = imageName;
-		this.isActive = isActive;
-	}
-
 	public void setImageName(String imageName) {
 		this.imageName = imageName;
 	}
@@ -65,10 +66,13 @@ public class Category {
 		this.isActive = isActive;
 	}
 
-	private String name;
+	public Category() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	
-	private String imageName;
 	
-	private Boolean isActive;
+	
+
 	
 }
