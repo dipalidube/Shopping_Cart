@@ -12,6 +12,15 @@
 			<div class="card card-sh">
 				<div class="card-header text-center fw-bold"> 
 					<p class="fs-4">View Products</p>
+					<th:block th:if="${session.succMsg}">
+								<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
+							
+							<th:block th:if="${session.errorMsg}">
+								<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
 				</div>
 				<div class="card-body">
 					<table class="table">
@@ -22,6 +31,8 @@
       <th scope="col">Title</th>
       <th scope="col">Category</th>
       <th scope="col">Price</th>
+      <th scope="col">Discount</th>
+      <th scope="col">Discount Price</th>
        <th scope="col">Stock</th>
        <th scope="col">Action</th>
     </tr>
@@ -29,14 +40,17 @@
   <tbody>
     <tr th:each="p,c:${products}"> 
       <th scope="row">[[${c.count}]]</th>
-      <td><img src="@{'/img/product_img/'+${p.image}}"></td>
-      <td>Otto</td>
-      <td>@mdo</td>
-       <td>Mark</td>
-      <td>Otto</td>
+      <td><img th:src="@{'/img/product_img/'+${p.image}}" width="70px" height="70px"></td>
+      <td>[[${p.title}]]</td>
+      <td>[[${p.category}]]</td>
+       <td>[[${p.price}]]</td>
+        <td>[[${p.discount}]]</td>
+        <td>[[${p.discountPrice}]]</td>
+      <td>[[${p.stock}]]</td>
       <td>
-		  <a href="#" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i>Edit</a>
-		  <a href="#" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>Delete</a>
+		  <a th:href="@{'/admin/editProduct/'+${p.id}}" 
+		  class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i>Edit</a>
+		  <a th:href="@{'/admin/deleteProduct/'+${p.id}}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>Delete</a>
 	  </td>
     </tr>
     

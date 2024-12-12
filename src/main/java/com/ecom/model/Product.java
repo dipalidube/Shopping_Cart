@@ -33,6 +33,26 @@ public class Product {
 	private int stock;
 	
 	private String image;
+	
+	private int discount;
+	
+	private Double discountPrice;
+
+	public int getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(int discount) {
+		this.discount = discount;
+	}
+
+	public Double getDiscountPrice() {
+		return discountPrice;
+	}
+
+	public void setDiscountPrice(Double discountPrice) {
+		this.discountPrice = discountPrice;
+	}
 
 	public Product(int id, String title, String description, String category, Double price, int stock, String image) {
 		super();

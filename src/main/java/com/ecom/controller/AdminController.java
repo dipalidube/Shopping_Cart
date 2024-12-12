@@ -145,7 +145,8 @@ public class AdminController {
 					Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
 				}
 				session.setAttribute("succMsg", "Category Update Success..");
-			}else {
+			}
+			else {
 				session.setAttribute("errorMsg", "Something Wrong on Server..");
 			}
 		return "redirect:/admin/loadEditCategory/" + category.getId();
@@ -158,7 +159,9 @@ public class AdminController {
 	String imageName=image.isEmpty()?"default.jpg":image.getOriginalFilename();
 	
 	product.setImage(imageName);
-		
+	
+	product.setDiscount(0);
+	product.setDiscountPrice(product.getPrice());
 		Product saveProduct =productservice.saveProduct(product);
 		
 		if(!ObjectUtils.isEmpty(saveProduct))
@@ -185,5 +188,52 @@ public class AdminController {
 	{
 		m.addAttribute("products",productservice.getAllProducts());
 		return "admin/products";
-	}	
+	}
+	
+	@GetMapping("/deleteProduct/{id}")
+	public String deleteProduct(@PathVariable int id,HttpSession session)
+	{
+	Boolean	deleteProduct=productservice.deleteProduct(id);
+		if(deleteProduct) {
+			session.setAttribute("succMsg", "Product delete success");
+		}
+		else
+		{
+			session.setAttribute("errorMsg", "Something wrong on server");
+		}
+		return "redirect:/admin/products";
+	}
+	
+	@GetMapping("/editProduct/{id}")
+	public String editProduct(@PathVariable int id, Model m)
+	{
+		m.addAttribute("product",productservice.getProductById(id));
+		m.addAttribute("categories",categoryService.getAllCategory());
+		return "admin/edit_product";
+	}
+	
+	@PostMapping("/updateProduct")
+	public String updateProduct(@ModelAttribute Product product,@RequestParam ("file") MultipartFile image,HttpSession session, Model m)
+	{
+		
+		if(product.getDiscount()<0 || product.getDiscount()>100)
+		{
+			session.setAttribute("errorMsg", "Invalid Discount");	
+		}
+		else {
+		
+	Product  updateProduct=productservice.updateProduct(product, image);
+		if(!ObjectUtils.isEmpty(updateProduct))
+		{
+			session.setAttribute("succMsg", "Product update success");	
+		}
+		else {
+			session.setAttribute("errorMsg", "Something wrong on server");
+		}
+		
+		}
+		
+		return "redirect:/admin/editProduct/"+product.getId();
+	}
+	
 }
