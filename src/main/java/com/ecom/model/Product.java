@@ -37,6 +37,8 @@ public class Product {
 	private int discount;
 	
 	private Double discountPrice;
+	
+	private Boolean isActive;
 
 	public int getDiscount() {
 		return discount;
@@ -125,5 +127,15 @@ public class Product {
 		super();
 
 	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	
 	
 }
