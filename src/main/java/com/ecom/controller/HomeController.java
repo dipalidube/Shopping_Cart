@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class HomeController {
 
 	@Autowired
 	private UserService userService;
-
+	
 	@Autowired
 	private Productservice productservice;
 
@@ -47,7 +48,7 @@ public class HomeController {
 		return "index";
 	}
 
-	@GetMapping("/login")
+	@GetMapping("/signin")
 	public String login() {
 		return "login";
 	}
