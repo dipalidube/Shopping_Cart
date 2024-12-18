@@ -8,44 +8,49 @@
 	<body>
 		<section>
 		<div class="container mt-5 p-5">
-						<div class="row">
+			<div class="row">
+				<div class="col-md-6 p-5">
+					<img src="img/ecom_site/cart.avif" alt="" width="100%" height="" />
+				</div>
 
-		<div class="col-md-6 p-5">
-			 <img src="img/ecom_site/cart.avif" alt="..." height="400px" width="100%">
-		</div>
-		<div class="col-md-6 mt-3 p-5">
-			<div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-				<div class="card-header">
-					<p class="fs-4 text-center"><b>Login</b> </p>
-					<div th:if="${param.error}" class="alert alert-danger">
-						Invalid email and password
-					</div>
-					<div th:if="${param.logout}" class="alert alert-success">
-						Logout Sucessfully</div>
-					
-				</div>
-				<div class="card-body">
-					<form action="/login" method="post">
-						<div class="mb-3">
-						<label class="form-label"> Email</label>
-						<input class="form-control" name="username" type="email">							
+				<div class="col-md-6 mt-3 p-5">
+					<div class="card shadow p-3 mb-5 bg-body rounded">
+						<div class="card-header">
+							<p class="fs-4 text-center">Login</p>
+							<div th:if="${param.error}" class="alert alert-danger text-center"> [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</div>
+									<div th:if="${param.logout}" class="alert alert-success text-center"> Logout Successfully </div>
 						</div>
+									
+						<div class="card-body">
+							<form action="/login" method="post"> 
+								<div class="mb-3">
+									<label class="form-label">Email</label> <input
+										class="form-control" name="username" type="email">
+								</div>
+
+								<div class="mb-3">
+									<label class="form-label">Password</label> <input
+										class="form-control" name="password" type="password">
+								</div>
+								<button type="submit"
+									class="btn bg-primary text-white col-md-12">Login</button>
 						
-						<div class="mb-3">
-						<label class="form-label"> Password</label>
-						<input class="form-control" name="password" type="password">							
+							</form>
 						</div>
-						<button type="submit" class="btn bg-primary text-white col-md-12">LOGIN</button>
-					</form>
-				</div>
-				<div class="card-footer text-center" >
-					<a href="#" class="text-decoration-none"> Forgot Password</a><br>
-					Don't have an account?
-					<a href="/register" class="text-decoration-none"> Create Account</a><br>
+						<div class="card-footer text-center">
+
+							
+
+							<a href="/forgot-password" class="text-decoration-none">Forgot Password</a><br>
+
+							Don't have account ?
+							<a href="/register" class="text-decoration-none">Create One</a>
+							
+						</div>
+
+					</div>
 				</div>
 			</div>
-		</div>
-		</div>
 		</div>
 		
 		</section>

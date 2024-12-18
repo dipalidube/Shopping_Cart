@@ -20,19 +20,27 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Override
+	@Override 
 	public UserDtls saveUser(UserDtls user) {
 		user.setRole("ROLE_USER");
-		String encodePassword =passwordEncoder.encode(user.getPassword());
+		
+		
+		String encodePassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodePassword);
-	UserDtls saveUser=userRepository.save(user);
+		UserDtls saveUser = userRepository.save(user);
 		return saveUser;
 	}
-
+	
 	@Override
 	public UserDtls getUserByEmail(String email) {
 		
 		return userRepository.findByEmail(email);
 	}
+
+	@Override
+	public Boolean existsEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
+
 
 }
