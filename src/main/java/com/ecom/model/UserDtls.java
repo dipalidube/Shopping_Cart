@@ -31,6 +31,14 @@ public class UserDtls {
 	private Boolean isEnable;
 	
 
+	public Boolean getIsEnable() {
+		return isEnable;
+	}
+
+	public void setIsEnable(Boolean isEnable) {
+		this.isEnable = isEnable;
+	}
+
 	public String getRole() {
 		return role;
 	}
