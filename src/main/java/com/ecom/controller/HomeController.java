@@ -2,12 +2,14 @@ package com.ecom.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -28,7 +30,11 @@ import com.ecom.repository.ProductRepository;
 import com.ecom.service.CategoryService;
 import com.ecom.service.Productservice;
 import com.ecom.service.UserService;
+import com.ecom.util.CommonUtil;
 
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -106,6 +112,49 @@ public class HomeController {
 		}
 
 		return "redirect:/register";
+	}
+
+	// Forgot Password logic code
+
+	@GetMapping("/forgot-password")
+	public String showForgotPassword() {
+		return "forgot_password.html";
+	}
+
+	@PostMapping("/forgot-password")
+	public String processForgotPassword(@RequestParam String email, HttpSession session, HttpServletRequest request)
+			throws UnsupportedEncodingException, MessagingException
+	{
+
+		UserDtls userByEmail = userService.getUserByEmail(email);
+
+		if (ObjectUtils.isEmpty(userByEmail)) {
+			session.setAttribute("errorMsg", "Invalid email");
+		} else {
+
+			String resetToken = UUID.randomUUID().toString();
+			userService.updateUserResetToken(email, resetToken);
+
+			// Generate URL :
+			// http://localhost:8080/reset-password?token=sfgdbgfswegfbdgfewgvsrg
+
+			String url = CommonUtil.generateUrl(request) + "/reset-password?token=" + resetToken;
+
+			Boolean sendMail = CommonUtil.sendMail(url, email);
+
+			if (sendMail) {
+				session.setAttribute("succMsg", "Please check your email..Password Reset link sent");
+			} else {
+				session.setAttribute("errorMsg", "Somethong wrong on server ! Email not send");
+			}
+		}
+
+		return "redirect:/forgot-password";
+	}
+
+	@GetMapping("/reset-password")
+	public String showResetPassword() {
+		return "reset.html";
 	}
 
 }

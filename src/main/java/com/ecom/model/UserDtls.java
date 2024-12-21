@@ -1,5 +1,7 @@
 package com.ecom.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +31,10 @@ public class UserDtls {
 	private String profileImage;
 	private String role;
 	private Boolean isEnable;
-	
+	private Boolean accountNonLocked;
+	private Integer failedAttempt;
+	private Date lockTime;
+	private String reset_token;
 
 	public Boolean getIsEnable() {
 		return isEnable;
@@ -54,6 +59,14 @@ public class UserDtls {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public String getReset_token() {
+		return reset_token;
+	}
+
+	public void setReset_token(String reset_token) {
+		this.reset_token = reset_token;
 	}
 
 	public void setId(Integer id) {
@@ -130,6 +143,30 @@ public class UserDtls {
 
 	public void setProfileImage(String profileImage) {
 		this.profileImage = profileImage;
+	}
+
+	public Boolean getAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	public void setAccountNonLocked(Boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public Integer getFailedAttempt() {
+		return failedAttempt;
+	}
+
+	public void setFailedAttempt(Integer failedAttempt) {
+		this.failedAttempt = failedAttempt;
+	}
+
+	public Date getLockTime() {
+		return lockTime;
+	}
+
+	public void setLockTime(Date lockTime) {
+		this.lockTime = lockTime;
 	}
 
 }
