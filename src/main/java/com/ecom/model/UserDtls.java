@@ -34,7 +34,7 @@ public class UserDtls {
 	private Boolean accountNonLocked;
 	private Integer failedAttempt;
 	private Date lockTime;
-	private String reset_token;
+	private String resetToken;
 
 	public Boolean getIsEnable() {
 		return isEnable;
@@ -61,12 +61,14 @@ public class UserDtls {
 		return id;
 	}
 
-	public String getReset_token() {
-		return reset_token;
+	
+
+	public String getResetToken() {
+		return resetToken;
 	}
 
-	public void setReset_token(String reset_token) {
-		this.reset_token = reset_token;
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
 	}
 
 	public void setId(Integer id) {
