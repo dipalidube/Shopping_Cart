@@ -12,6 +12,23 @@
 
 			<div class="col-md-12 p-5">
 				<div class="row">
+					<th:block th:if="${session.succMsg}">
+						
+								<p class="text-success fw-bold alert-success" role="alert"> [[${session.succMsg}]] </p>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"> 
+									
+								</th:block>
+
+						
+
+					</th:block>
+					<th:block th:if="${session.errorMsg}">
+
+						<p class="text-danger alert alert-danger ">[[${session.errorMsg}]] </p>
+								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}">
+
+					</th:block>
+					</th:block>
 					<div class="col-md-6 text-center">
 						<img alt="" src="img/product_img/hp1.webp" width="330px" height="400px">
 					</div>
@@ -37,8 +54,7 @@
 							Policy : 7 Days Replacement & Return
 						</p>
 						<p class="fs-5 fw-bold">
-							price : &nbsp; &nbsp;<i
-								class="fas fa-rupee-sing"></i>[[${product.discountPrice}]]
+							price : &nbsp; &nbsp;<i class="fas fa-rupee-sing"></i>[[${product.discountPrice}]]
 							<span class="fs-6 text-decoration-line-through text-secondary">[[${product.price}]]</span>
 							<span class="fs-6 text-success">[[${product.discount}]]% off</span>
 						</p>
@@ -59,14 +75,22 @@
 							</div>
 						</div>
 
-						<th:block th:if="${product.stock>0}"> 
-							<a href="login.jsp" class="btn btn-danger col-md-12">Add To Cart</a>
+						<th:block th:if="${product.stock>0}">
+							<th:block th:if="${user==null}">
+								<a href="/signin" class="btn btn-danger col-md-12">Add To Cart</a>
+							</th:block>
+
+							<th:block th:unless="${user==null}">
+								<a th:href="@{'/addCart?pid='+${product.id}+'&uid='+${user.id}}"
+									class="btn btn-danger col-md-12">Add To Cart</a>
+							</th:block>
+
 						</th:block>
-						
-						<th:block th:unless="${product.stock>0}"> 
+
+						<th:block th:unless="${product.stock>0}">
 							<a href="#" class="btn text-white btn-warning col-md-12">Out of Stock</a>
 						</th:block>
-						
+
 					</div>
 				</div>
 

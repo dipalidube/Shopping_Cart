@@ -28,6 +28,7 @@ import com.ecom.model.Category;
 import com.ecom.model.Product;
 import com.ecom.model.UserDtls;
 import com.ecom.repository.ProductRepository;
+import com.ecom.service.CartService;
 import com.ecom.service.CategoryService;
 import com.ecom.service.Productservice;
 import com.ecom.service.UserService;
@@ -55,6 +56,24 @@ public class HomeController {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private CartService cartService;
+	
+	@ModelAttribute
+	public void getUserDetails(Principal p, Model m) {
+		if (p != null) {
+			String email = p.getName();
+			UserDtls userDtls = userService.getUserByEmail(email);
+			m.addAttribute("user", userDtls);
+			Integer countCart = cartService.getCountCart(userDtls.getId());
+			m.addAttribute("countCart", countCart);
+		}
+		
+		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
+		m.addAttribute("categorys", allActiveCategory);
+
+	}
 
 	@GetMapping("/")
 	public String index() {
@@ -70,6 +89,8 @@ public class HomeController {
 	public String register() {
 		return "register";
 	}
+	
+	
 
 	@GetMapping("/products")
 	public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category) {

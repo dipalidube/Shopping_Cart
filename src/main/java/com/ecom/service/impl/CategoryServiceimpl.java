@@ -61,6 +61,12 @@ public class CategoryServiceimpl implements CategoryService {
 		List<Category> categories=categoryRepository.findByIsActiveTrue();
 		return categories;
 	}
+
+	@Override
+	public Integer getCountCart(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	

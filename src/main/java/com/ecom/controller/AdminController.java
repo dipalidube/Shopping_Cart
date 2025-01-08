@@ -43,6 +43,9 @@ public class AdminController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CategoryService cartService;
 
 	@ModelAttribute
 	public void getUserDetails(Principal p, Model m) {
@@ -50,6 +53,8 @@ public class AdminController {
 			String email = p.getName();
 			UserDtls userDtls = userService.getUserByEmail(email);
 			m.addAttribute("user", userDtls);
+			Integer countCart = cartService.getCountCart(userDtls.getId());
+			  m.addAttribute("countCart", countCart);
 		}
 		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
 		m.addAttribute("categorys", allActiveCategory);
@@ -237,14 +242,12 @@ public class AdminController {
 	}
 
 	@GetMapping("/updateSts")
-	public String updateUserAccountStatus(@RequestParam Boolean status,@RequestParam Integer id, HttpSession session )
-	{
+	public String updateUserAccountStatus(@RequestParam Boolean status, @RequestParam Integer id, HttpSession session) {
 		Boolean f = userService.updateAccountStatus(id, status);
-		if(f)
-		{
+		if (f) {
 			session.setAttribute("sccMsg", "Account Status Updated");
-		}else {
-			session.setAttribute("errorMsg","Something Wrong On Server ");
+		} else {
+			session.setAttribute("errorMsg", "Something Wrong On Server ");
 		}
 		return "redirect:/admin/users";
 	}
