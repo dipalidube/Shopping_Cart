@@ -1,5 +1,6 @@
 package com.ecom.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.CascadeType;
@@ -27,22 +28,22 @@ public class ProductOrder {
 
 	private String orderId;
 
-	private Date orderDate;
+	private LocalDate orderDate;
 
 	@ManyToOne
 	private Product product;
-	
+
 	private Double price;
-	
+
 	private Integer quantity;
-	
+
 	@ManyToOne
 	private UserDtls user;
-	
+
 	private String status;
-	
+
 	private String paymentType;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	private OrderAddress orderAddress;
 
@@ -66,8 +67,8 @@ public class ProductOrder {
 		return orderDate;
 	}
 
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
+	public void setOrderDate(LocalDate localDate) {
+		this.orderDate = localDate;
 	}
 
 	public Product getProduct() {
@@ -120,9 +121,12 @@ public class ProductOrder {
 
 	public void setOrderAddress(OrderAddress address) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-	
+	public Object getOrderAddress() {
+
+		return null;
+	}
+
 }

@@ -24,10 +24,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ecom.model.Category;
 import com.ecom.model.Product;
+import com.ecom.model.ProductOrder;
 import com.ecom.model.UserDtls;
 import com.ecom.service.CategoryService;
+import com.ecom.service.OrderService;
 import com.ecom.service.Productservice;
 import com.ecom.service.UserService;
+import com.ecom.util.CommonUtil;
+import com.ecom.util.OrderStatus;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -46,6 +50,12 @@ public class AdminController {
 	
 	@Autowired
 	private CategoryService cartService;
+	
+	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
+	private CommonUtil commonUtil;
 
 	@ModelAttribute
 	public void getUserDetails(Principal p, Model m) {
@@ -251,5 +261,38 @@ public class AdminController {
 		}
 		return "redirect:/admin/users";
 	}
-
+	@GetMapping("/orders")
+	public String getAllOrders(Model m) {
+		List<ProductOrder> allOrders=orderService.getAllOrders();
+		m.addAttribute("orders",allOrders);
+		return "/admin/orders";
+	}
+	
+	@GetMapping("/update-order-status")
+	public String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) throws Exception {
+		OrderStatus[] values = OrderStatus.values();
+		String status=null;
+		for(OrderStatus orderSt: values)
+		{
+			if(orderSt.getId().equals(st))
+			{
+				status=orderSt.getName();
+			}
+		}
+		ProductOrder updateOrder=orderService.updateOrderStatus(id, status);
+		try {
+			commonUtil.sendMailForProductOrder(updateOrder, status);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		if(!ObjectUtils.isEmpty(updateOrder) ) {
+			session.setAttribute("succMsg", "Status Updated");
+		}
+		else {
+			session.setAttribute("errorMsg", "Status no updated");
+		}
+		return "redirect:/user/user-orders";
+	}
+	
 }

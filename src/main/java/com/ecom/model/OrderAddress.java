@@ -95,8 +95,5 @@ public class OrderAddress {
 
 	public void setPincode(String pincode) {
 		this.pincode = pincode;
-	}
-	
-	
-		
+	}		
 }

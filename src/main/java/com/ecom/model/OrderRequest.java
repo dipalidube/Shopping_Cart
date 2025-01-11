@@ -14,6 +14,7 @@ public class OrderRequest {
 	private String state;
 	private String pincode;
 	private String paymentType;
+	
 	public String getFirstName() {
 		return firstName;
 	}
