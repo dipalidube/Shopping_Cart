@@ -62,11 +62,7 @@ public class CategoryServiceimpl implements CategoryService {
 		return categories;
 	}
 
-	@Override
-	public Integer getCountCart(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 	
 	

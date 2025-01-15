@@ -9,9 +9,11 @@ public interface OrderService {
 
 	public void saveOrder(Integer userid, OrderRequest orderRequest) throws Exception;
 
-	List<ProductOrder> getOrdersByUser(Integer userId);
-	
+	public List<ProductOrder> getOrdersByUser(Integer userId);
+
 	public ProductOrder updateOrderStatus(Integer id, String status);
-	
-	List<ProductOrder> getAllOrders();
+
+	public List<ProductOrder> getAllOrders();
+
+	public ProductOrder getOrdersByOrderId(String orderId);
 }

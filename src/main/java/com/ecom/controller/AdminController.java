@@ -47,13 +47,13 @@ public class AdminController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private CategoryService cartService;
-	
+
 	@Autowired
 	private OrderService orderService;
-	
+
 	@Autowired
 	private CommonUtil commonUtil;
 
@@ -64,7 +64,7 @@ public class AdminController {
 			UserDtls userDtls = userService.getUserByEmail(email);
 			m.addAttribute("user", userDtls);
 			Integer countCart = cartService.getCountCart(userDtls.getId());
-			  m.addAttribute("countCart", countCart);
+			m.addAttribute("countCart", countCart);
 		}
 		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
 		m.addAttribute("categorys", allActiveCategory);
@@ -201,8 +201,15 @@ public class AdminController {
 	}
 
 	@GetMapping("/products")
-	public String loadViewProduct(Model m) {
-		m.addAttribute("products", productservice.getAllProducts());
+	public String loadViewProduct(Model m,@RequestParam(defaultValue = "") String ch) {
+		List<Product> Products=null;
+		if(ch!=null && ch.length()>0) {
+			Products=productservice.searchProduct(ch);
+		}
+		else {
+			Products =	productservice.getAllProducts();
+		}
+		m.addAttribute("products", Products);
 		return "admin/products";
 	}
 
@@ -238,9 +245,7 @@ public class AdminController {
 			} else {
 				session.setAttribute("errorMsg", "Something wrong on server");
 			}
-
 		}
-
 		return "redirect:/admin/editProduct/" + product.getId();
 	}
 
@@ -261,38 +266,61 @@ public class AdminController {
 		}
 		return "redirect:/admin/users";
 	}
+
 	@GetMapping("/orders")
 	public String getAllOrders(Model m) {
-		List<ProductOrder> allOrders=orderService.getAllOrders();
-		m.addAttribute("orders",allOrders);
+		List<ProductOrder> allOrders = orderService.getAllOrders();
+		m.addAttribute("orders", allOrders);
+		m.addAttribute("srch", false);
 		return "/admin/orders";
 	}
-	
+
 	@GetMapping("/update-order-status")
-	public String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session) throws Exception {
+	public String updateOrderStatus(@RequestParam Integer id, @RequestParam Integer st, HttpSession session)
+			throws Exception {
 		OrderStatus[] values = OrderStatus.values();
-		String status=null;
-		for(OrderStatus orderSt: values)
-		{
-			if(orderSt.getId().equals(st))
-			{
-				status=orderSt.getName();
+		String status = null;
+		for (OrderStatus orderSt : values) {
+			if (orderSt.getId().equals(st)) {
+				status = orderSt.getName();
 			}
 		}
-		ProductOrder updateOrder=orderService.updateOrderStatus(id, status);
+		ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
 		try {
 			commonUtil.sendMailForProductOrder(updateOrder, status);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		if(!ObjectUtils.isEmpty(updateOrder) ) {
+
+		if (!ObjectUtils.isEmpty(updateOrder)) {
 			session.setAttribute("succMsg", "Status Updated");
-		}
-		else {
+		} else {
 			session.setAttribute("errorMsg", "Status no updated");
 		}
 		return "redirect:/user/user-orders";
 	}
+
+	@GetMapping("/search-order")
+	public String searchProduct(@RequestParam String orderId, Model m, HttpSession session) {
+		if (orderId != null && orderId.length() > 0) {
+
+			ProductOrder order = orderService.getOrdersByOrderId(orderId.trim());
+			if (ObjectUtils.isEmpty(order)) {
+				session.setAttribute("errorMsg", "Incorrect orderId");
+				m.addAttribute("orderDtls", null);
+			} else {
+				m.addAttribute("orderDtls", order);
+			}
+			m.addAttribute("srch", true);
+		} else {
+			List<ProductOrder> allOrders = orderService.getAllOrders();
+			m.addAttribute("orders", allOrders);
+			m.addAttribute("srch", false);
+		}
+		return "/admin/orders";
+	}
+
 	
+	
+
 }

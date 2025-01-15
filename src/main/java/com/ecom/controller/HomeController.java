@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,20 +47,20 @@ public class HomeController {
 	private CategoryService categoryService;
 
 	@Autowired
-	private UserService userService;
+	private Productservice productservice;
 
 	@Autowired
-	private Productservice productservice;
+	private UserService userService;
 
 	@Autowired
 	private CommonUtil commonUtil;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private CartService cartService;
-	
+
 	@ModelAttribute
 	public void getUserDetails(Principal p, Model m) {
 		if (p != null) {
@@ -69,7 +70,7 @@ public class HomeController {
 			Integer countCart = cartService.getCountCart(userDtls.getId());
 			m.addAttribute("countCart", countCart);
 		}
-		
+
 		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
 		m.addAttribute("categorys", allActiveCategory);
 
@@ -89,17 +90,31 @@ public class HomeController {
 	public String register() {
 		return "register";
 	}
-	
-	
 
 	@GetMapping("/products")
-	public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category) {
+	public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category
+			,@RequestParam(name="pageNo",defaultValue = "0") Integer pageNo,@RequestParam(name= "pageSize",defaultValue = "2")Integer pageSize) {
 //	System.out.println("category="+category);
 		List<Category> categories = categoryService.getAllActiveCategory();
-		List<Product> products = productservice.getAllActiveProducts(category);
-		m.addAttribute("categories", categories);
-		m.addAttribute("products", products);
 		m.addAttribute("paramValue", category);
+		m.addAttribute("categories", categories);
+		
+		/*
+		 * List<Product> products = productservice.getAllActiveProducts(category);
+		 * m.addAttribute("products", products);
+		 */
+	
+		Page<Product> page =productservice.getAllActiveProductPagination(pageNo,pageSize, category);
+		List<Product> products=page.getContent();
+		m.addAttribute("products",products);
+		m.addAttribute("productsSize",products.size());
+		m.addAttribute("pageNo",page.getNumber());
+		m.addAttribute("pageSize",pageSize);
+		m.addAttribute("totalElements", page.getTotalElements());
+		m.addAttribute("totalPages",page.getTotalPages());
+		m.addAttribute("isFirst",page.isFirst());
+		m.addAttribute("isLast",page.isLast());
+		
 		return "product";
 	}
 
@@ -207,10 +222,19 @@ public class HomeController {
 			userByToken.setResetToken(null);
 			userService.updateUser(userByToken);
 			session.setAttribute("succMsg", "Password Change Successfully");
-			m.addAttribute("msg","Password change successfully");
+			m.addAttribute("msg", "Password change successfully");
 			return "message";
 		}
 
+	}
+
+	@GetMapping("/search")
+	public String searchProduct(@RequestParam String ch, Model m) {
+		List<Product> searchProducts = productservice.searchProduct(ch);
+		m.addAttribute("products", searchProducts);
+		List<Category> categories = categoryService.getAllActiveCategory();
+		m.addAttribute("categories", categories);
+		return "product";
 	}
 
 }
