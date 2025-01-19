@@ -35,6 +35,7 @@ import com.ecom.service.Productservice;
 import com.ecom.service.UserService;
 import com.ecom.util.CommonUtil;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -77,7 +78,13 @@ public class HomeController {
 	}
 
 	@GetMapping("/")
-	public String index() {
+	public String index(Model m) {
+		List<Category> allActiveCategory = categoryService.getAllActiveCategory().stream()
+				.sorted((c1, c2) -> c2.getId().compareTo(c1.getId())).limit(6).toList();
+		List<Product> allActiveProducts = productservice.getAllActiveProducts("").stream()
+				.sorted((p1, p2) -> p2.getId().compareTo(p1.getId())).limit(8).toList();
+		m.addAttribute("category", allActiveCategory);
+		m.addAttribute("products", allActiveProducts);
 		return "index";
 	}
 
@@ -92,29 +99,35 @@ public class HomeController {
 	}
 
 	@GetMapping("/products")
-	public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category
-			,@RequestParam(name="pageNo",defaultValue = "0") Integer pageNo,@RequestParam(name= "pageSize",defaultValue = "2")Integer pageSize) {
+	public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category,
+			@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+			@RequestParam(name = "pageSize", defaultValue = "9") Integer pageSize, @RequestParam String ch) {
 //	System.out.println("category="+category);
 		List<Category> categories = categoryService.getAllActiveCategory();
 		m.addAttribute("paramValue", category);
 		m.addAttribute("categories", categories);
-		
+
 		/*
 		 * List<Product> products = productservice.getAllActiveProducts(category);
 		 * m.addAttribute("products", products);
 		 */
-	
-		Page<Product> page =productservice.getAllActiveProductPagination(pageNo,pageSize, category);
-		List<Product> products=page.getContent();
-		m.addAttribute("products",products);
-		m.addAttribute("productsSize",products.size());
-		m.addAttribute("pageNo",page.getNumber());
-		m.addAttribute("pageSize",pageSize);
+		Page<Product> page = null;
+		if (StringUtils.isEmpty(ch)) {
+			page = productservice.getAllActiveProductPagination(pageNo, pageSize, category);
+		} else {
+			page = productservice.searchActiveProductPagination(pageNo, pageSize, category);
+		}
+
+		List<Product> products = page.getContent();
+		m.addAttribute("products", products);
+		m.addAttribute("productsSize", products.size());
+		m.addAttribute("pageNo", page.getNumber());
+		m.addAttribute("pageSize", pageSize);
 		m.addAttribute("totalElements", page.getTotalElements());
-		m.addAttribute("totalPages",page.getTotalPages());
-		m.addAttribute("isFirst",page.isFirst());
-		m.addAttribute("isLast",page.isLast());
-		
+		m.addAttribute("totalPages", page.getTotalPages());
+		m.addAttribute("isFirst", page.isFirst());
+		m.addAttribute("isLast", page.isLast());
+
 		return "product";
 	}
 
@@ -211,9 +224,7 @@ public class HomeController {
 	@PostMapping("/reset-password")
 	public String ResetPassword(@RequestParam String token, @RequestParam String password, HttpSession session,
 			Model m) {
-
 		UserDtls userByToken = userService.getUserByToken(token);
-
 		if (userByToken == null) {
 			m.addAttribute("errorMsg", "Your link is invalid or expired!!");
 			return "message";
@@ -225,7 +236,6 @@ public class HomeController {
 			m.addAttribute("msg", "Password change successfully");
 			return "message";
 		}
-
 	}
 
 	@GetMapping("/search")
@@ -236,5 +246,4 @@ public class HomeController {
 		m.addAttribute("categories", categories);
 		return "product";
 	}
-
 }

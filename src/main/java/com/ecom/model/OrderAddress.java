@@ -25,6 +25,10 @@ public class OrderAddress {
 	
 	private String pincode;
 
+	public OrderAddress() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Integer getId() {
 		return id;
 	}

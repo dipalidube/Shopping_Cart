@@ -63,10 +63,13 @@ public class CommonUtil {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-		helper.setFrom("daspabitra55@gmail.com", "Shooping Cart");
+	
+		
+		helper.setFrom("dipalidube2001@gmail.com", "Shooping Cart");
 		helper.setTo(order.getOrderAddress().getEmail());
 
 		msg = msg.replace("[[name]]", order.getOrderAddress().getFirstName());
+		
 		msg = msg.replace("[[orderStatus]]", status);
 		msg = msg.replace("[[productName]]", order.getProduct().getTitle());
 		msg = msg.replace("[[category]]", order.getProduct().getCategory());
@@ -79,7 +82,6 @@ public class CommonUtil {
 		mailSender.send(message);
 		return true;
 	}
-
 	public UserDtls getLoggedInUserDetails(Principal p) {
 		String email = p.getName();
 		UserDtls userDtls = userService.getUserByEmail(email);

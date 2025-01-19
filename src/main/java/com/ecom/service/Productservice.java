@@ -23,6 +23,15 @@ public interface Productservice {
 	public List<Product> getAllActiveProducts(String category);
 	
 	public List<Product> searchProduct(String ch);
+	
+	public Page<Product> searchProductPagination(Integer pageNo, Integer pageSize, String  ch);
+	
 	public Page<Product> getAllActiveProductPagination(Integer pageNo, Integer pageSize,String category);
+	
+	public Page<Product> getAllProductsPagination(Integer pageNo, Integer pageSize);
+
+	public Page<Product> searchActiveProductPagination(Integer pageNo, Integer pageSize, String category);
+
+	Page<Product> searchActiveProductPagination(Integer pageNo, Integer pageSize, String category, String ch);
 	
 }

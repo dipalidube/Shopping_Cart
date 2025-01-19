@@ -63,7 +63,7 @@ public class ProductOrder {
 		this.orderId = orderId;
 	}
 
-	public Date getOrderDate() {
+	public LocalDate getOrderDate() {
 		return orderDate;
 	}
 
@@ -124,9 +124,9 @@ public class ProductOrder {
 
 	}
 
-	public Object getOrderAddress() {
-
-		return null;
+	public OrderAddress getOrderAddress() {
+		return orderAddress;
 	}
 
+	
 }

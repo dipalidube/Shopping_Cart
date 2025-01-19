@@ -39,6 +39,12 @@ public class ProductServiceImpl implements Productservice {
 	}
 
 	@Override
+	public Page<Product> getAllProductsPagination(Integer pageNo, Integer pageSize) {
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		return productRepository.findAll(pageable);
+	}
+
+	@Override
 	public Boolean deleteProduct(Integer id) {
 		Product product = productRepository.findById(id).orElse(null);
 		if (!ObjectUtils.isEmpty(product)) {
@@ -115,15 +121,46 @@ public class ProductServiceImpl implements Productservice {
 	}
 
 	@Override
+	public Page<Product> searchProductPagination(Integer pageNo, Integer pageSize, String ch) {
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		return productRepository.findByTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(ch, ch, pageable);
+
+	}
+
+	@Override
 	public Page<Product> getAllActiveProductPagination(Integer pageNo, Integer pageSize, String category) {
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		Page<Product> pageProduct = null;
 		if (ObjectUtils.isEmpty(category)) {
 			pageProduct = productRepository.findByIsActiveTrue(pageable);
 		} else {
-			pageProduct = productRepository.findByCategory(pageable,category);
+			pageProduct = productRepository.findByCategory(pageable, category);
 		}
 		return pageProduct;
 	}
 
+	@Override
+	public Page<Product> searchActiveProductPagination(Integer pageNo, Integer pageSize,String category, String ch) {
+		
+		Page<Product> pageProduct = null;
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+		pageProduct = productRepository.findByisActiveTrueAndTitleContainingIgnoreCaseOrCategoryContainingIgnoreCase(ch,
+				ch, pageable);
+//		
+//		if (ObjectUtils.isEmpty(category)) {
+//			pageProduct = productRepository.findByIsActiveTrue(pageable);
+//		} else {
+//			pageProduct = productRepository.findByCategory(pageable,category);
+//		}
+	
+		return pageProduct;
+	}
+
+	@Override
+	public Page<Product> searchActiveProductPagination(Integer pageNo, Integer pageSize, String category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

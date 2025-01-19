@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="~{base::Layout(~{::section})}">
-
 <head>
 	<meta charset="ISO-8859-1">
 	<title>Insert here</title>
 </head>
-
 <body>
 	<section>
 		<div class="container-fluid bg-primary p-5 mt-5">
@@ -22,7 +20,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="container-fluid mt-1">
 			<div class="row">
 
@@ -59,7 +56,6 @@
 													<p class="fs-6 fw-bold ">
 														<span>&#8377;[[${p.discountPrice}]] <br>
 														</span>
-
 														<span
 															class="text-decoration-line-through text-secondary">&#8377;
 															[[${p.price}]]</span>
@@ -84,39 +80,34 @@
 							Total Products : [[${totalElements}]]
 						</div>
 						<div class="col-md-6 ">
-							<th:block th:if="${productsSize>0}"> 
-							<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<li class="page-item" 
-							th:classappend="${isFirst} ? 'disabled':'' ">
-								<a class="page-link" 
-								th:href="@{'/products?pageNo='+${pageNo-1}}" aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
-								</a>
-							</li>
-							<li th:each="i:${#numbers.sequance(1,totalPages)}" class="page-item" th:classappend="${pageNo+1==i}?'active':''">
-								<a class="page-link"
-							 th:href="@{'/products?pageNo='+${i-1}}">
-								[[${i}]]</a></li>
-							
-							<li class="page-item" th:classappend="${isLast} ? 'disabled':'' ">
-								<a class="page-link" th:href="@{'/products?pageNo='+${pageNo+1}}" aria-label="Previous" aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
+							<th:block th:if="${productsSize>0}">
+								<nav aria-label="Page navigation example">
+									<ul class="pagination">
+										<li class="page-item" th:classappend="${isFirst} ? 'disabled':'' ">
+											<a class="page-link" th:href="@{'/products?pageNo='+${pageNo-1}}"
+												aria-label="Previous">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
+										<li th:each="i:${#numbers.sequence(1,totalPages)}" class="page-item"
+											th:classappend="${pageNo+1==i}?'active':''">
+											<a class="page-link" th:href="@{'/products?pageNo='+${i-1}}">
+												[[${i}]]</a>
+										</li>
+										<li class="page-item" th:classappend="${isLast} ? 'disabled':'' ">
+											<a class="page-link" th:href="@{'/products?pageNo='+${pageNo+1}}"
+												 aria-label="Next">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									</ul>
+								</nav>
 						</div>
 						</th:block>
 					</div>
-					
-
 				</div>
-
 			</div>
 		</div>
-
 	</section>
 </body>
-
 </html>

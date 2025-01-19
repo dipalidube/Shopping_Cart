@@ -2,6 +2,8 @@ package com.ecom.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.ecom.model.Category;
 
 public interface CategoryService {
@@ -20,4 +22,7 @@ public interface CategoryService {
 	public List<Category> getAllActiveCategory();
 
 	public Integer getCountCart(Integer id);
+	
+	public Page<Category> getAllCategorPagination(Integer pageNo, Integer pageSize);
+	
 }

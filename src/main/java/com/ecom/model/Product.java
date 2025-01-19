@@ -19,7 +19,7 @@ public class Product {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	@Column(length = 500)
 	private  String title;
 	
@@ -67,11 +67,13 @@ public class Product {
 		this.image = image;
 	}
 
-	public int getId() {
+	
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -125,7 +127,6 @@ public class Product {
 
 	public Product() {
 		super();
-
 	}
 
 	public Boolean getIsActive() {
@@ -135,7 +136,5 @@ public class Product {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-
-	
 	
 }

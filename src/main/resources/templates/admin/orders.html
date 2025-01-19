@@ -180,7 +180,7 @@
 											</a></li>
 
 										<li th:each="i:${#numbers.sequence(1,totalPages)}" class="page-item"
-											th:classappend="${pageNo+1==i}?'active':''" ]]><a class="page-link"
+											th:classappend="${pageNo+1==i}?'active':''" ><a class="page-link"
 												th:href="@{'/admin/orders?pageNo='+${i-1}}">[[${i}]]</a></li>
 
 										<li class="page-item" th:classappend="${isLast} ? 'disabled':''"><a
